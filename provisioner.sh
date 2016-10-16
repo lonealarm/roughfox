@@ -27,6 +27,8 @@ EOF
     cd /opt &&
     dnf groupinstall --assumeyes "Basic Desktop" &&
     dnf install --assumeyes xorg-x11-server-utils systemd &&
+    cp /vagrant/ssh/id_rsa /vagrant/.ssh &&
+    chmod 0600 /vagrant/.ssh/id_rsa &&
     (cat > /usr/lib/systemd/service/roughfox.service <<EOF
 [Unit]
 Description=Rough Fox
