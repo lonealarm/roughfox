@@ -27,6 +27,12 @@ EOF
     cd /opt &&
     dnf groupinstall --assumeyes "Basic Desktop" &&
     dnf install --assumeyes xorg-x11-server-utils systemd &&
+    ls -1 volumes | while read VOLUME
+    do
+        docker volume create --name ${VOLUME} &&
+        docker run --interactive --tty --rm --volume /vagrant/volumes/${VOLUME}:/input:ro ${VOLUME}:/output alpine:3.4 cp --archive 
+        true
+    done &&
     (cat > /usr/lib/systemd/service/roughfox.service <<EOF
 [Unit]
 Description=Rough Fox
