@@ -26,6 +26,7 @@ EOF
     sh VBoxLinuxAdditions.run --nox11 &&
     cd /opt &&
     dnf groupinstall --assumeyes "Basic Desktop" &&
+    dnf install --assumeyes util-linux &&
     dnf install --assumeyes xorg-x11-server-utils systemd &&
     (cat > /usr/lib/systemd/service/roughfox.service <<EOF
 [Unit]
