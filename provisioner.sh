@@ -36,6 +36,8 @@ EOF
     done &&
     docker pull emorymerryman/cloud9:2.2.1 &&
     cat /vagrant/bash_profile.sh >> /home/vagrant/.bash_profile &&
+    groupadd docker &&
+    usermod -aG docker vagrant &&
     dnf update --assumeyes &&
     dnf clean all &&
     true
