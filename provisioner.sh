@@ -28,12 +28,15 @@ EOF
     dnf groupinstall --assumeyes "Fedora Workstation" &&
     dnf install --assumeyes util-linux &&
     dnf install --assumeyes xorg-x11-server-utils &&
-    ls -1 /vagrant/volumes | while read VOLUME
-    do
-        docker volume create --name ${VOLUME} &&
-        docker run --detach --volume /vagrant/volumes/${VOLUME}:/input:ro --volume ${VOLUME}:/output --privileged alpine:3.4 cp --archive /input/. /output &&
-        true
-    done &&
+
+
+    docker volume create --name dot_ssh &&
+    docker run --detach --volume /vagrant/volumes/dot_ssh:/input:ro --volume dot_ssh:/output --privileged alpine:3.4 chmod 0700 /output &&
+    docker run --detach --volume /vagrant/volumes/dot_ssh:/input:ro --volume dot_ssh:/output --privileged alpine:3.4 cat /input/config > /output/config &&
+    docker run --detach --volume /vagrant/volumes/dot_ssh:/input:ro --volume dot_ssh:/output --privileged alpine:3.4 chmod 0600/output/config &&
+    docker run --detach --volume /vagrant/volumes/dot_ssh:/input:ro --volume dot_ssh:/output --privileged alpine:3.4 cat /input/id_rsa > /output/id_rsa &&
+    docker run --detach --volume /vagrant/volumes/dot_ssh:/input:ro --volume dot_ssh:/output --privileged alpine:3.4 chmod 0600/output/id_rsa &&
+
     docker pull emorymerryman/cloud9:2.2.1 &&
     cat /vagrant/bash_profile.sh >> /home/vagrant/.bash_profile &&
     groupadd docker &&
