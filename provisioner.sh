@@ -31,7 +31,7 @@ EOF
     ls -1 /vagrant/volumes | while read VOLUME
     do
         docker volume create --name ${VOLUME} &&
-        docker run --detach --volume /vagrant/volumes/${VOLUME}:/input:ro ${VOLUME}:/output --privileged alpine:3.4 cp --archive /input/* /output &&
+        docker run --detach --volume /vagrant/volumes/${VOLUME}:/input:ro --volume ${VOLUME}:/output --privileged alpine:3.4 cp --archive /input/* /output &&
         true
     done &&
     cp /vagrant/roughfox.sh /usr/local/sbin/roughfox.sh &&
