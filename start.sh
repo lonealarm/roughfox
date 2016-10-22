@@ -1,17 +1,17 @@
 #!/bin/bash
 
 vagrant destroy -f &&
-    vagrant provision &&
+    vagrant up &&
     echo A &&
-    sleep 60 &&
+    sleep 180 &&
     vagrant halt &&
+    vagrant up &&
     echo B &&
-    sleep 60 &&
+    sleep 180 &&
+    vagrant halt &&
     vagrant up &&
     echo C &&
-    sleep 60 &&
+    sleep 180 &&
     vagrant halt &&
-    echo D &&
-    sleep 60 &&
     vagrant up &&
     true
