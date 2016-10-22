@@ -27,29 +27,15 @@ EOF
     dnf groupinstall --assumeyes "Basic Desktop" &&
     dnf groupinstall --assumeyes "Fedora Workstation" &&
     dnf install --assumeyes util-linux &&
-    dnf install --assumeyes xorg-x11-server-utils systemd &&
+    dnf install --assumeyes xorg-x11-server-utils &&
     ls -1 /vagrant/volumes | while read VOLUME
     do
         docker volume create --name ${VOLUME} &&
         docker run --detach --volume /vagrant/volumes/${VOLUME}:/input:ro --volume ${VOLUME}:/output --privileged alpine:3.4 cp --archive /input/. /output &&
         true
     done &&
-    cp /vagrant/roughfox.sh /usr/local/sbin/roughfox.sh &&
-    chmod 0500 /usr/local/sbin/roughfox.sh &&
-    (cat > /etc/systemd/system/roughfox.service <<EOF
-[Unit]
-Description=Rough Fox
-
-[Service]
-ExecStart=/usr/local/sbin/roughfox.sh
-
-[Install]
-WantedBy=multi-user.target
-EOF
-    ) &&
-    systemctl start roughfox.service &&
-    systemctl enable roughfox.service &&
     docker pull emorymerryman/cloud9:2.2.1 &&
+    cat /vagrant/bash_profile.sh >> /root/.bash_profile &&
     dnf update --assumeyes &&
     dnf clean all &&
     true
