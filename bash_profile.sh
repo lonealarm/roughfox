@@ -1,8 +1,8 @@
 
-[ ! -f /root/roughfox.cid ] &&
+[ ! -f ${HOME}/roughfox.cid ] &&
 xhost + &&
 docker run \
-    --cidfile /root/roughfox.cid \
+    --cidfile ${HOME}/roughfox.cid \
     --restart always \
     --detach \
     --env BIN_URL=git@github.com:endlesselectron/bin.git \
