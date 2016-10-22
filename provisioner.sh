@@ -49,6 +49,7 @@ EOF
     ) &&
     systemctl start roughfox.service &&
     systemctl enable roughfox.service &&
+    docker pull emorymerryman/cloud9:2.2.1 &&
     dnf update --assumeyes &&
     dnf clean all &&
     true
