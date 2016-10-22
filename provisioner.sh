@@ -35,7 +35,7 @@ EOF
         true
     done &&
     docker pull emorymerryman/cloud9:2.2.1 &&
-    cat /vagrant/bash_profile.sh >> /root/.bash_profile &&
+    cat /vagrant/bash_profile.sh >> /home/vagrant/.bash_profile &&
     dnf update --assumeyes &&
     dnf clean all &&
     true
