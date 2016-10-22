@@ -4,7 +4,6 @@ dnf update --assumeyes &&
     rm -rf /etc/systemd/system/default.target &&
     ln -s /lib/systemd/system/graphical.target /etc/systemd/system/default.target &&
     (tee /etc/yum.repos.d/docker.repo <<EOF
--'EOF'
 [dockerrepo]
 name=Docker Repository
 baseurl=https://yum.dockerproject.org/repo/main/fedora/$releasever/
@@ -26,20 +25,23 @@ EOF
     sh VBoxLinuxAdditions.run --nox11 &&
     cd /opt &&
     dnf groupinstall --assumeyes "Basic Desktop" &&
+    dnf groupinstall --assumeyes "Fedora Workstation" &&
     dnf install --assumeyes util-linux &&
     dnf install --assumeyes xorg-x11-server-utils systemd &&
-    ls -1 volumes | while read VOLUME
+    ls -1 /vagrant/volumes | while read VOLUME
     do
         docker volume create --name ${VOLUME} &&
-        docker run --interactive --tty --rm --volume /vagrant/volumes/${VOLUME}:/input:ro ${VOLUME}:/output alpine:3.4 cp --archive 
+        docker run --interactive --tty --rm --volume /vagrant/volumes/${VOLUME}:/input:ro ${VOLUME}:/output --privileged alpine:3.4 cp --archive /input/* /output &&
         true
     done &&
-    (cat > /usr/lib/systemd/service/roughfox.service <<EOF
+    cp /vagrant/roughfox.sh /usr/local/sbin/roughfox.sh &&
+    chmod 0500 /usr/local/sbin/roughfox.sh &&
+    (cat > /etc/systemd/system/roughfox.service <<EOF
 [Unit]
 Description=Rough Fox
 
 [Service]
-ExecStart=/usr/bin/xhost +
+ExecStart=/usr/local/sbin/roughfox.sh
 
 [Install]
 WantedBy=multi-user.target
