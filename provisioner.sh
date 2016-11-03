@@ -2,6 +2,7 @@
 
 dnf update --assumeyes &&
     rm -rf /etc/systemd/system/default.target &&
+    systemctl disable sshd.service &&
     ln -s /lib/systemd/system/graphical.target /etc/systemd/system/default.target &&
     (tee /etc/yum.repos.d/docker.repo <<EOF
 [dockerrepo]
@@ -43,4 +44,5 @@ EOF
     usermod -aG docker vagrant &&
     dnf update --assumeyes &&
     dnf clean all &&
+    systemctl stop sshd.service &&
     true
